@@ -1,0 +1,90 @@
+---
+description: "Use Untitled UI as the default design system + coding style."
+globs: untitled-ui/**/*.{ts,tsx,js,jsx}
+alwaysApply: true
+---
+
+# Untitled UI is the default UI system
+
+## Repo pathways (for correct imports)
+
+- The app lives in `untitled-ui/` (Next.js App Router under `untitled-ui/src/app`).
+- Use the `@/*` alias for imports (maps to `untitled-ui/src/*`).
+- Prefer importing existing components from `@/components/**`.
+- Theme/tokens live under `@/styles/` (notably `@/styles/theme.css` via `@/styles/globals.css`).
+
+## Component + styling rules
+
+- Prefer **Untitled UI React components** first. Do not introduce a second component library.
+- Use Tailwind classes in the same style as existing components; do not invent a new styling approach.
+- Use the project's existing class merge utility (`cx` from `@/utils/cx`) when combining Tailwind classes (do not add a new helper).
+- Prefer existing design tokens / theme variables already in the repo (for example values in `@/styles/theme.css`).
+- Keep typography, spacing, border radius, and shadows consistent with Untitled UI patterns.
+- **Light mode only**: do not add dark mode support (no `dark:` variants, no `.dark-mode` handling, no theme toggles) unless explicitly requested.
+
+## When translating from Figma
+
+- Match layout and spacing first (structure), then typography, then colors.
+- Reuse existing components that match (buttons, inputs, modals, tables, etc.) before creating new ones.
+- If a requested UI maps to an existing Untitled UI component, use it rather than re-building from scratch.
+
+## Guardrails
+
+- Do NOT add new UI libraries (no shadcn/ui, MUI, Chakra, etc.) unless explicitly requested.
+- Do NOT add new state management libraries unless already used in the repo.
+- Favor small, composable components and keep files consistent with the repo’s patterns.
+
+## UI-engineering workflow (follow for UI build tasks)
+
+- Default to **Untitled UI React components**, out of the box.
+  - Avoid custom work unless a “Build vs Buy” exception is justified.
+  - Do not invent new primitives, tokens, or component APIs unless explicitly justified.
+- Default to an existing Untitled UI **component pattern** first.
+  - If a requirement doesn’t match, propose:
+    - (A) the closest Untitled UI pattern
+    - (B) how to adapt it with props/slots/composition
+    - (C) only then a minimal custom extension (or headless/base approach)
+- **Before coding**, output a short **Component mapping** list:
+  - requirement → exact Untitled UI component(s) used
+- For every adaptation, include a **Break/Extend decision** note using this rubric:
+  - **Extend when**: layout/variants/slots solve it without changing semantics
+  - **Break when**: semantics, accessibility roles, or core interaction differs
+  - **New component only when**: no Untitled UI component can meet the role
+- If it’s unclear from the codebase, **call out uncertainty** and ask for confirmation (or point to the file/component you’re basing the label on).
+
+### Build vs Buy (when to go beyond OOTB)
+
+- **Extend OOTB (preferred)** when tokens/variants/slots/composition meet needs and semantics stay the same.
+- **Headless/base approach** when you’re fighting visuals (overrides, tokens don’t map) or behavior mismatches (bypass props, layered a11y fixes).
+- **Fully custom (rare)** only for core differentiators / domain-specific workflows that existing systems can’t model.
+- **When deviating from OOTB**, include an explicit **Deviation notice**:
+  - What is not OOTB (Extended OOTB vs Headless/Base vs Fully custom)
+  - Why (2–4 bullets, based on the triggers above)
+  - Maintenance cost (low/medium/high) and how you’re keeping it safe
+
+## “Annotate” mode (annotated component overlay images)
+
+When the user says **"annotate"** (or provides `annotate: <screenshot path>`), do this:
+
+- Use the latest relevant screenshot under `untitled-ui/screenshots/` (or the exact file they reference).
+- Produce an **annotated overlay image** labeling major UI regions using the system decision model:
+
+  - **STYLED (OOTB)**: Untitled UI component used directly, customized only via tokens/theme.
+  - **HEADLESS**: Behavior powered by React Aria (or equivalent) with styling mapped to tokens; anatomy mirrors Untitled patterns.
+  - **CUSTOM**: Guild-owned component (custom behavior and design) that does not rely on Untitled UI implementation.
+
+- If a region is simply composed of multiple Styled components, you may optionally note:
+  - **COMPOSED (Styled)**: Composition of Untitled components without escalation.
+
+- Include a short legend and a concise list mapping:
+
+  region → classification → component(s) used
+
+- If classification is uncertain from the codebase:
+  - Call out the uncertainty.
+  - Reference the file/component you’re basing the assessment on.
+  - Do not assume escalation without evidence.
+
+- When labeling anything as **HEADLESS** or **CUSTOM**, include a brief note:
+  - Why it likely escalated (visual pressure, behavior mismatch, domain differentiation, etc.)
+  - Expected maintenance level (low / medium / high)
