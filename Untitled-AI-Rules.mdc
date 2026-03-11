@@ -69,12 +69,12 @@ When the user says **"annotate"** (or provides `annotate: <screenshot path>`), d
 - Use the latest relevant screenshot under `untitled-ui/screenshots/` (or the exact file they reference).
 - Produce an **annotated overlay image** labeling major UI regions using the system decision model:
 
-  - **STYLED (OOTB)**: Untitled UI component used directly, customized only via tokens/theme.
+  - **PURE (OOTB)**: Untitled UI component used directly, customized only via tokens/theme.
   - **HEADLESS**: Behavior powered by React Aria (or equivalent) with styling mapped to tokens; anatomy mirrors Untitled patterns.
   - **CUSTOM**: Guild-owned component (custom behavior and design) that does not rely on Untitled UI implementation.
 
 - If a region is simply composed of multiple Styled components, you may optionally note:
-  - **COMPOSED (Styled)**: Composition of Untitled components without escalation.
+  - **ARRANGED PURE (Styled)**: Composition of Untitled components without escalation.
 
 - Include a short legend and a concise list mapping:
 
